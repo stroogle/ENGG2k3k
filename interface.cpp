@@ -1,4 +1,5 @@
-// This is an example comment to show requests
+// Servo Library
+#include <Servo.h>
 
 
 class MotorControl {
