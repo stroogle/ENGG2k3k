@@ -2,6 +2,7 @@
 
 
 class MotorControl {
+    // Assignee: COLM
     public:
         /**
          * @brief Rotates the motor the specified number of degrees.
@@ -12,6 +13,7 @@ class MotorControl {
 };
 
 class LightingControl {
+    // Assignee: Eli
     public:
         /**
          * @brief Sends LED light wave up the Archimedes Screw
@@ -20,6 +22,7 @@ class LightingControl {
 };
 
 class SensorControl {
+    // Assignee: Alexy
     private:
         enum TriggeredState {Triggered, NotTriggered};
         TriggeredState state = NotTriggered;
@@ -43,6 +46,7 @@ class SensorControl {
 };
 
 class DisplayControl {
+    // Assignee: Andre
     public:
         /**
          * @brief Displays the number provided onto the LED display.
@@ -53,7 +57,7 @@ class DisplayControl {
 };
 
 class CounterControl {
-
+    // Assignee: Ibrahim
     private:
         int counter;
 
@@ -81,6 +85,7 @@ class CounterControl {
 };
 
 class MarbleCountDisplay {
+    // Assignee: Thomas
     private:
         DisplayControl display;
         SensorControl sensor;
