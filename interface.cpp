@@ -23,8 +23,16 @@ class MotorControl {
          * @param deg 
          */
         void rotate(int deg) {
-            int currentRotation = motor.read();
+            int currentRotation = getRotation();
             motor.write(currentRotation + deg);
+        }
+
+        /**
+         * @brief Gets the servo's rotation
+         * 
+         */
+        int getRotation() {
+            return motor.read();
         }
 };
 
