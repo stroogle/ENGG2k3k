@@ -4,13 +4,36 @@
 
 class MotorControl {
     // Assignee: COLM
+    private:
+        Servo motor;
+
     public:
+
+        /**
+         * @brief Construct a new Motor Control object
+         * 
+         * @param motorPin The ping to attach the motor too.
+         */
+        MotorControl(int motorPin) {
+            motor.attach(motorPin);
+        }
         /**
          * @brief Rotates the motor the specified number of degrees.
          * 
          * @param deg 
          */
-        void rotate(int deg) {}
+        void rotate(int deg) {
+            int currentRotation = getRotation();
+            motor.write(currentRotation + deg);
+        }
+
+        /**
+         * @brief Gets the servo's rotation
+         * 
+         */
+        int getRotation() {
+            return motor.read();
+        }
 };
 
 class LightingControl {
@@ -64,7 +87,7 @@ class CounterControl {
 
     public:
         /**
-         * @brief Get the Count object
+         * @brief Get the Count
          * 
          * @return int - The current count
          */
