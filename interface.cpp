@@ -6,6 +6,52 @@ class MotorControl {
     // Assignee: COLM
     private:
         Servo motor;
+        enum MotorState {Rotating, Stopped};
+        MotorState state = Stopped;
+        int stoppedTimeStamp;
+        int rotatingTimeStamp;
+        int STOPPED_TIME_MS = 1000;
+        int ROTATE_TIME_MS = 5000;
+        int STOPPED_SPEED = 0;
+        int ROTATE_SPEED = 180;
+
+        /**
+         * @brief Set the Speed object
+         * 
+         * @param speed The speed of the continuous motor
+         */
+        void setSpeed(int speed) {
+            motor.write(speed);
+        }
+
+        /**
+         * @brief Get the Speed object
+         * 
+         * @return int the speed of the continuous motor
+         */
+        int getSpeed() {
+            return motor.read();
+        }
+
+        /**
+         * @brief Stops the motor from turning.
+         * 
+         */
+        void stop() {
+            stoppedTimeStamp = millis();
+            state = Stopped;
+            setSpeed(STOPPED_SPEED);
+        }
+
+        /**
+         * @brief Starts the motor rotating
+         * 
+         */
+        void rotate() {
+            rotatingTimeStamp = millis();
+            state = Rotating;
+            setSpeed(ROTATE_SPEED);
+        }
 
     public:
 
@@ -16,7 +62,26 @@ class MotorControl {
          */
         MotorControl(int motorPin) {
             motor.attach(motorPin);
+            stoppedTimeStamp = millis();
         }
+
+        /**
+         * @brief Runs the motor stopping mechanism.
+         * 
+         */
+        void run() {
+            int currentTimeStamp = millis();
+            // Has the motor been running for long enough?
+            if(state == Stopped && stoppedTimeStamp + STOPPED_TIME_MS < currentTimeStamp)
+            {
+                rotate();
+            } else if (state == Rotating && rotatingTimeStamp + ROTATE_TIME_MS < currentTimeStamp)
+            {
+                stop();
+            }
+        }
+
+        // LEGACY INTERFACE DESIGN, HERE INCASE WE DON'T GET CONTINOUS MOTOR.
         /**
          * @brief Rotates the motor the specified number of degrees.
          * 
