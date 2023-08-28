@@ -6,6 +6,74 @@ class MotorControl {
     // Assignee: COLM
     private:
         Servo motor;
+        enum MotorState {Rotating, Stopped};
+        MotorState state;
+        int stoppedTimeStamp;
+        int rotatingTimeStamp;
+        int STOPPED_TIME_MS = 1000;
+        int ROTATE_TIME_MS = 5000;
+        int STOPPED_SPEED = 0;
+        int ROTATE_SPEED = 180;
+
+        /**
+         * @brief Set the Speed object
+         * 
+         * @param speed The speed of the continuous motor
+         */
+        void setSpeed(int speed) {
+            motor.write(speed);
+        }
+
+        /**
+         * @brief Get the Speed object
+         * 
+         * @return int the speed of the continuous motor
+         */
+        int getSpeed() {
+            return motor.read();
+        }
+
+        /**
+         * @brief Used to check if the motor was last stopped timeMs ago.
+         * 
+         * @param timeMs - The amount of time in MS to check the motor has stopped for
+         * @return true - When it has been atleast timeMs since stoppedTimeStamp was set 
+         * @return false - Otherwise
+         */
+        bool hasStoppedFor(int timeMs) {
+            return (stoppedTimeStamp + timeMs) < millis();
+        }
+
+        /**
+         * @brief Used to check if the motor was last rotating timeMs ago
+         * 
+         * @param timeMs - The amount of time in MS to check the motor has been rotating for
+         * @return true - When the motor has been atleast timeMS since rotatingTimeStamp was set.
+         * @return false - Otherwise
+         */
+        bool hasRotatedFor(int timeMs) {
+            return (rotatingTimeStamp + timeMs) < millis();
+        }
+
+        /**
+         * @brief Stops the motor from turning.
+         * 
+         */
+        void stop() {
+            stoppedTimeStamp = millis();
+            state = Stopped;
+            setSpeed(STOPPED_SPEED);
+        }
+
+        /**
+         * @brief Starts the motor rotating
+         * 
+         */
+        void rotate() {
+            rotatingTimeStamp = millis();
+            state = Rotating;
+            setSpeed(ROTATE_SPEED);
+        }
 
     public:
 
@@ -16,7 +84,24 @@ class MotorControl {
          */
         MotorControl(int motorPin) {
             motor.attach(motorPin);
+            stop();
         }
+
+        /**
+         * @brief Runs the motor stopping mechanism.
+         * 
+         */
+        void run() {
+            if(state == Stopped && hasStoppedFor(STOPPED_TIME_MS))
+            {
+                rotate();
+            } else if (state == Rotating && hasRotatedFor(ROTATE_TIME_MS))
+            {
+                stop();
+            }
+        }
+
+        // LEGACY INTERFACE DESIGN, HERE INCASE WE DON'T GET CONTINOUS MOTOR.
         /**
          * @brief Rotates the motor the specified number of degrees.
          * 
