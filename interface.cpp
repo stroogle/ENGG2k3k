@@ -7,7 +7,7 @@ class MotorControl {
     private:
         Servo motor;
         enum MotorState {Rotating, Stopped};
-        MotorState state = Stopped;
+        MotorState state;
         int stoppedTimeStamp;
         int rotatingTimeStamp;
         int STOPPED_TIME_MS = 1000;
@@ -31,6 +31,28 @@ class MotorControl {
          */
         int getSpeed() {
             return motor.read();
+        }
+
+        /**
+         * @brief Used to check if the motor was last stopped timeMs ago.
+         * 
+         * @param timeMs - The amount of time in MS to check the motor has stopped for
+         * @return true - When it has been atleast timeMs since stoppedTimeStamp was set 
+         * @return false - Otherwise
+         */
+        bool hasStoppedFor(int timeMs) {
+            return (stoppedTimeStamp + timeMs) < millis();
+        }
+
+        /**
+         * @brief Used to check if the motor was last rotating timeMs ago
+         * 
+         * @param timeMs - The amount of time in MS to check the motor has been rotating for
+         * @return true - When the motor has been atleast timeMS since rotatingTimeStamp was set.
+         * @return false - Otherwise
+         */
+        bool hasRotatedFor(int timeMs) {
+            return (rotatingTimeStamp + timeMs) < millis();
         }
 
         /**
@@ -62,7 +84,7 @@ class MotorControl {
          */
         MotorControl(int motorPin) {
             motor.attach(motorPin);
-            stoppedTimeStamp = millis();
+            stop();
         }
 
         /**
@@ -70,12 +92,10 @@ class MotorControl {
          * 
          */
         void run() {
-            int currentTimeStamp = millis();
-            // Has the motor been running for long enough?
-            if(state == Stopped && stoppedTimeStamp + STOPPED_TIME_MS < currentTimeStamp)
+            if(state == Stopped && hasStoppedFor(STOPPED_TIME_MS))
             {
                 rotate();
-            } else if (state == Rotating && rotatingTimeStamp + ROTATE_TIME_MS < currentTimeStamp)
+            } else if (state == Rotating && hasRotatedFor(ROTATE_TIME_MS))
             {
                 stop();
             }
