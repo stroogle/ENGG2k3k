@@ -46,27 +46,61 @@ class LightingControl {
 };
 
 class SensorControl {
-    // Assignee: Alexy
+    // Assignee: Alexey
     private:
         enum TriggeredState {Triggered, NotTriggered};
         TriggeredState state = NotTriggered;
-
+        int sensorPin;
         /**
          * @brief 
          * 
          * @return true - if the light stream between the sensor/reflector is broken.
          * @return false 
          */
-        bool lightIsBlocked() {}
+        bool lightIsBlocked() {
+            int Obstacle;
+            Obstacle = digitalRead(sensorPin);
+
+            return Obstacle == LOW;
+             
+        }
 
     public:
+        /**
+         * @param sensorPinInput is the pin that the sensor will be plugged into
+        */
+        SensorControl(int sensorPinInput){
+            sensorPin = sensorPinInput;
+            pinMode(sensorPin,INPUT);
+        };
+        
         /**
          * @brief Checks if the sensor has detected an object. Will only be true ONCE per trigger
          * 
          * @return true - If the marble has detected an object.
          * @return false - otherwise
          */
-        bool detected() {}
+        bool detected() {
+            bool sensorBlocked = lightIsBlocked();
+
+            if (sensorBlocked && state == Triggered)
+            {
+                return false;
+            }
+
+            else if (sensorBlocked && state == NotTriggered)
+            {
+                state = Triggered;
+                return true;
+            }
+
+            else 
+            {
+                state = NotTriggered;
+                return false;
+            }
+            
+        }
 };
 
 class DisplayControl {
