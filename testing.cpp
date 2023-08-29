@@ -1,44 +1,62 @@
 // Here is the document I will start to write tests in.
+// #include <Arduino.h>
 #include <iostream>
-#include <string>
+#include <stdlib.h>
 
-// Function to test
-bool function1(int a) {
-    return a > 5;   
-}
+/*
+Arduino have a unit testing library, AUnit. We will utilise this for the unit testing of our code. 
+Below is sample code before I knew about the AUnit library. Below I used user defined assertEquals similar
+to JUnit testing. 
+*/
 
-// If parameter is not true, test fails
-// This check function would be provided by the test framework
-#define IS_TRUE(x) { if (!(x)) std::cout << __FUNCTION__ << " failed on line " << __LINE__ << std::endl; }
-
-// Test for function1()
-// You would need to write these even when using a framework
-void test_function1()
+void setup()
 {
-    IS_TRUE(!function1(0));
-    IS_TRUE(!function1(5));
-    IS_TRUE(function1(10));
+    // Serial.begin(9600); // Initialize serial communication at 9600 baud rate
 }
 
 // SAMPLE: Function to add two integers
-int add(int a, int b) {
+int add(int a, int b)
+{
     return a + b;
 }
 
-// Coded in assertEquals similar to JUnit testing. Can be adjusted for different dataTypes. 
-bool assertEquals(int actual, int expected, const std::string& testName) {
-    if (actual == expected) {
+/*
+NOTE: This testing code will be added to the end of the interface.cpp file.
+This will make it easier for function calls to be used for testing.
+*/
+
+// eg:
+void testLightOn(int currentLightVal)
+{
+    // Serial.print("testLightOn :");
+    if (currentLightVal > 0)
+    {
+        // Serial.print("PASSED");
+    }
+    else
+        // Serial.print("FAILED");
+}
+
+// Coded in assertEquals similar to JUnit testing. Can be adjusted for different dataTypes.
+bool assertEquals(int actual, int expected, const std::string &testName)
+{
+    if (actual == expected)
+    {
+        // std::cout << std::endl is to be changed so we can use Serial.println()
         std::cout << "PASS - " << testName << std::endl;
         return true;
-    } else {
+    }
+    else
+    {
         std::cout << "FAIL - " << testName << " (Expected: " << expected << ", Actual: " << actual << ")" << std::endl;
         return false;
     }
 }
 
-int main() {
+int main()
+{
     // Call all tests. Using a test framework would simplify this.
-    
+
     // Test case 1
     int result1 = add(5, 3);
     assertEquals(result1, 8, "Test Case 1");
@@ -53,6 +71,3 @@ int main() {
 
     return 0;
 }
-
-
-
