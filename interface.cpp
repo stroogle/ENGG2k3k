@@ -51,6 +51,7 @@ class SensorControl {
         enum TriggeredState {Triggered, NotTriggered};
         TriggeredState state = NotTriggered;
         int sensorPin;
+        int lastDetectedTime;
         /**
          * @brief 
          * 
@@ -71,11 +72,12 @@ class SensorControl {
         */
         SensorControl(int sensorPinInput){
             sensorPin = sensorPinInput;
+            lastDetectedTime = millis();
             pinMode(sensorPin,INPUT);
         };
         
         /**
-         * @brief Checks if the sensor has detected an object. Will only be true ONCE per trigger
+         * @brief Checks if the sensor has detected an object and sets a timestamp for this detection time. Will only be true ONCE per trigger
          * 
          * @return true - If the marble has detected an object.
          * @return false - otherwise
@@ -91,6 +93,7 @@ class SensorControl {
             else if (sensorBlocked && state == NotTriggered)
             {
                 state = Triggered;
+                lastDetectedTime = millis();
                 return true;
             }
 
@@ -99,8 +102,20 @@ class SensorControl {
                 state = NotTriggered;
                 return false;
             }
-            
+          
         }
+
+        /**
+         * @brief holds timestamp for last time a marble was detected
+         * 
+         * 
+         * @return timestamp of the last time a marble has passed the sensor in milliseconds
+        */
+        int lastDetected() {
+
+            return lastDetectedTime;
+
+        }  
 };
 
 class DisplayControl {
