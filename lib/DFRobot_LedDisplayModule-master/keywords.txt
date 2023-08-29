@@ -1,0 +1,23 @@
+#######################################
+# Syntax  Map For DFRobot_LedDisplayModule 
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DFRobot_LedDisplayModule	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+displayOn	KEYWORD2
+displayOff	KEYWORD2
+flashTwos	KEYWORD2
+flashOnes	KEYWORD2
+flashHalfs	KEYWORD2
+stopFlash	KEYWORD2
+setBrightness	KEYWORD2
+setDisplayArea	KEYWORD2
+print	KEYWORD2
