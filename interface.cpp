@@ -205,26 +205,37 @@ class CounterControl {
         int counter;
 
     public:
+        CounterControl(int number) {
+            counter = number;
+        }
         /**
          * @brief Get the Count
          * 
          * @return int - The current count
          */
-        int getCount() {}
+        int getCount() {
+            return counter;  // Return counter
+        }
 
         /**
          * @brief Set the Count object
          * 
          * @return int - The previous value of the counter
          */
-        int setCount(int number) {}
+        int setCount(int number) {
+            int previousValue = counter; // Store the previous value
+            counter = number;           // Update the counter
+            return previousValue;       // Return the previous value
+        }
 
         /**
          * @brief Increment the Count of the object
          * 
          * @return int - The previous value of the counter
          */
-        int incrementCount() {}
+        int incrementCount() {
+            return setCount(counter + 1); // Take stored value from setCount and incrementing by 1 and return it
+        }
 };
 
 class MarbleCountDisplay {
