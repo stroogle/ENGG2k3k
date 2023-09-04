@@ -6,6 +6,7 @@ class MotorControl {
     // Assignee: COLM
     private:
         Servo motor;
+        SensorControl sensor;
         enum MotorState {Rotating, Stopped};
         MotorState state;
         int stoppedTimeStamp;
@@ -14,6 +15,7 @@ class MotorControl {
         int ROTATE_TIME_MS = 5000;
         int STOPPED_SPEED = 0;
         int ROTATE_SPEED = 180;
+        int DETECTED_THRESHOLD_MS = 20000;
 
         /**
          * @brief Set the Speed object
@@ -82,8 +84,9 @@ class MotorControl {
          * 
          * @param motorPin The ping to attach the motor too.
          */
-        MotorControl(int motorPin) {
+        MotorControl(int motorPin, SensorControl s) {
             motor.attach(motorPin);
+            sensor = s;
             stop();
         }
 
@@ -92,6 +95,10 @@ class MotorControl {
          * 
          */
         void run() {
+            if(sensor.lastDetected() + DETECTED_THRESHOLD_MS < millis()) {
+                stop();
+                return;
+            }
             if(state == Stopped && hasStoppedFor(STOPPED_TIME_MS))
             {
                 rotate();
