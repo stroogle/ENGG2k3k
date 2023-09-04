@@ -1,6 +1,6 @@
 // Servo Library
 #include <Servo.h>
-
+#include <Arduino.h>
 
 class MotorControl {
     // Assignee: COLM
