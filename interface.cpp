@@ -1,7 +1,7 @@
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
-
+# include "DFRobot_LedDisplayModule.h"
 class MotorControl {
     // Assignee: COLM
     private:
@@ -211,14 +211,15 @@ class SensorControl {
 };
 
 class DisplayControl {
-    // Assignee: Andre
-    public:
+    // Assignee: Andrei Ziganshin
         /**
          * @brief Displays the number provided onto the LED display.
          * 
          * @param number 
          */
-        void showCount(int number) {}
+        void showCount(int number) {
+            LED.print(number);
+        }
 };
 
 class CounterControl {
