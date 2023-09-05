@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "~/../lib/**"
+                "~/../lib/**",
+                "${workspaceFolder}/lib/AUnit-1.7.1/src"
             ],
             "defines": [],
             "windowsSdkVersion": "10.0.19041.0",
