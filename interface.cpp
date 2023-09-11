@@ -1,6 +1,8 @@
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
+// #incluce <TMRpcm.h>
+#include <TMRpcm.h>
 
 class MotorControl {
     // Assignee: COLM
@@ -276,3 +278,24 @@ class MarbleCountDisplay {
          */
         void run() {}
 };
+
+class SpeakerControl {
+
+    private:
+        int NUMBER_OF_FILES = 3;
+        char* FILES[NUMBER_OF_FILES] = {"file1.WAV", "file2.WAV", "file3.WAV"};
+
+    public:
+        SpeakerControl(int speakerPin) {
+            tmrcpm.speakerPin = speakerPin;
+        }
+
+        void playRandom() {
+            int fileIdx = millis() % NUMBER_OF_FILES;
+            tmrcpm.play(FILES[fileIdx]);
+        }
+
+        void playFile(String file) {
+            tmrcpm.play(file);
+        }
+}
