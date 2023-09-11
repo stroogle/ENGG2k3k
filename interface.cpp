@@ -293,11 +293,13 @@ class SpeakerControl {
     private:
         int NUMBER_OF_FILES = 3;
         char* FILES[NUMBER_OF_FILES] = {"file1.WAV", "file2.WAV", "file3.WAV"};
+        SensorControl sensor;
 
     public:
-        SpeakerControl(int speakerPin, char* files) {
+        SpeakerControl(int speakerPin, char* files, SensorControl s) {
             tmrcpm.speakerPin = speakerPin;
             FILES = files;
+            sensor = s;
         }
 
         void playRandom() {
@@ -307,5 +309,11 @@ class SpeakerControl {
 
         void playFile(String file) {
             tmrcpm.play(file);
+        }
+
+        void run() {
+            if(sensor.detected()) {
+              playRandom();
+            }
         }
 }
