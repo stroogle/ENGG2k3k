@@ -295,8 +295,9 @@ class SpeakerControl {
         char* FILES[NUMBER_OF_FILES] = {"file1.WAV", "file2.WAV", "file3.WAV"};
 
     public:
-        SpeakerControl(int speakerPin) {
+        SpeakerControl(int speakerPin, char* files) {
             tmrcpm.speakerPin = speakerPin;
+            FILES = files;
         }
 
         void playRandom() {
