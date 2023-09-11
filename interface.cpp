@@ -313,7 +313,7 @@ class SpeakerControl {
 
         void run() {
             if(sensor.detected()) {
-              playRandom();
+              playRandom(); // This might be blocking... We will have to test.
             }
         }
 }
