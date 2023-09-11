@@ -276,7 +276,12 @@ class MarbleCountDisplay {
          * @brief Begins the Marble Counter Component
          * 
          */
-        void run() {}
+        void run() {
+            if(sensor.detected()) {
+                counter.incrementCount();
+            }
+            display.showCount(counter.getCount());
+        }
 };
 
 class SpeakerControl {
