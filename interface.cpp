@@ -270,7 +270,11 @@ class MarbleCountDisplay {
         CounterControl counter;
 
     public:
-        MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {}
+        MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {
+          display = d;
+          sensor = s;
+          counter = c;
+        }
 
         /**
          * @brief Begins the Marble Counter Component
