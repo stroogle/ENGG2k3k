@@ -132,12 +132,35 @@ class MotorControl {
 
 class LightingControl {
     // Assignee: Eli
+    private: 
+        SensorControl entrySensor;
+        int brightness;
+        bool increase;
+
     public:
+        LightingControl (SensorControl s) {
+        entrySenor = s;
+        brightness = 0;
+        increase = true;
+     }
         /**
          * @brief Sends LED light wave up the Archimedes Screw
          */
-        void sendWave() {}
-};
+        void sendWave() {
+            if(brightness <= 255 && increase == true){
+            brightness++;
+                if(brightness == 255)increase == false;
+            } 
+            if(brightness >= 0 && increase == false){
+                brightness--;
+                if(bright==0) increase == true;
+            }
+        for (int i = 0; i < NUMBER_LEDS; i++) {
+            LEDs[i] = CRGB(0, j, 0); // Set color for all LEDs
+             }
+        FastLED.show(); // Display the updated LED colors
+            }
+    }
 
 class SensorControl {
     // Assignee: Alexey
