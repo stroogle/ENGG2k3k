@@ -139,7 +139,7 @@ class LightingControl {
 
     public:
         LightingControl (SensorControl s) {
-        entrySenor = s;
+        entrySensor = s;
         brightness = 0;
         increase = true;
      }
