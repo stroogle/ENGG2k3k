@@ -147,6 +147,7 @@ class LightingControl {
          * @brief Sends LED light wave up the Archimedes Screw
          */
         void sendWave() {
+            if(entrySensor.detected){
             if(brightness <= 255 && increase == true){
             brightness++;
                 if(brightness == 255)increase == false;
@@ -156,10 +157,11 @@ class LightingControl {
                 if(bright==0) increase == true;
             }
         for (int i = 0; i < NUMBER_LEDS; i++) {
-            LEDs[i] = CRGB(0, j, 0); // Set color for all LEDs
+            LEDs[i] = CRGB(0, brightness, 0); // Set color for all LEDs
              }
         FastLED.show(); // Display the updated LED colors
             }
+        }
     }
 
 class SensorControl {
