@@ -2,6 +2,7 @@
 // #include <Arduino.h>
 #include <iostream>
 #include <stdlib.h>
+#include <AUnit.h>
 
 /*
 Arduino have a unit testing library, AUnit. We will utilise this for the unit testing of our code. 

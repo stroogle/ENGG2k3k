@@ -1,7 +1,6 @@
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
-# include "DFRobot_LedDisplayModule.h"
 class MotorControl {
     // Assignee: COLM
     private:
@@ -269,11 +268,50 @@ class MarbleCountDisplay {
         CounterControl counter;
 
     public:
-        MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {}
+        MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {
+          display = d;
+          sensor = s;
+          counter = c;
+        }
 
         /**
          * @brief Begins the Marble Counter Component
          * 
          */
-        void run() {}
+        void run() {
+            if(sensor.detected()) {
+                counter.incrementCount();
+            }
+            display.showCount(counter.getCount());
+        }
 };
+
+class SpeakerControl {
+
+    private:
+        int NUMBER_OF_FILES = 3;
+        char* FILES[NUMBER_OF_FILES] = {"file1.WAV", "file2.WAV", "file3.WAV"};
+        SensorControl sensor;
+
+    public:
+        SpeakerControl(int speakerPin, char* files, SensorControl s) {
+            tmrcpm.speakerPin = speakerPin;
+            FILES = files;
+            sensor = s;
+        }
+
+        void playRandom() {
+            int fileIdx = millis() % NUMBER_OF_FILES;
+            tmrcpm.play(FILES[fileIdx]);
+        }
+
+        void playFile(String file) {
+            tmrcpm.play(file);
+        }
+
+        void run() {
+            if(sensor.detected()) {
+              playRandom(); // This might be blocking... We will have to test.
+            }
+        }
+}
