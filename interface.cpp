@@ -245,6 +245,11 @@ class CounterControl {
          * @return int - The previous value of the counter
          */
         int setCount(int number) {
+
+            if(number > 99999999){
+                number = 0;
+            }
+            
             int previousValue = counter; // Store the previous value
             counter = number;           // Update the counter
             return previousValue;       // Return the previous value
