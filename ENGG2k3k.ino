@@ -1,10 +1,22 @@
-  /*
+
+#include <FastLED.h> 
+ 
+#define LED_PIN 7 // whatever pin we connect it to 
+#define NUMBER_LEDS 40 // number of LEDS 
+ 
+CRGB LED[NUMBER_LEDS]; 
+
+ /*
   Global Variable Creation for Arduino PINS
   */
  const int analogPin = A5;  // the "SCL" LCD display pin
  const int analogPin = A4;  // the "SDK" LCD display pin
 
+
 void setup() {
+FastLED.addLeds<WS2812, LED_PIN, GRB>(LED, NUMBER_LEDS); // need to check LED type 
+
+ 
       Serial.begin(115200);
   /*
    * Wait for the chip to be initialized completely, and then exit.
