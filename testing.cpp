@@ -12,6 +12,17 @@ test(getMarbleCountTest) {
     assertEqual(expectedCount, actualCount);
 }
 
+test(testMotorOn) {
+    SensorControl sensor = new SensorControl(2);
+    Motor testMotor = new Motor(9, sensor);  // a new counter for when we run this test
+    testMotor.rotate();
+
+    bool motorOn = true;
+    bool motorActualState = if(testMotor.getSpeed)
+    
+    assertEqual(motorOn, motorActualState);
+}
+
 void setup() {
     Serial.begin(9600);
     while (!Serial) {
