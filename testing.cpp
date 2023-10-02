@@ -2,7 +2,7 @@
 #include <AUnit.h>
 
 // Include functions and classes to be tested here.
-#include "interface.h"
+#include "Interface.h"
 
 test(getMarbleCountTest) {
     int expectedCount = 10; // number of marbles we manually insert and expect to see as "detected". Subject to change.

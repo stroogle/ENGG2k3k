@@ -1,3 +1,66 @@
+/*
+  Morse.h - Library for flashing Morse code.
+  Created by David A. Mellis, November 2, 2007.
+  Released into the public domain.
+*/
+#ifndef Interface_h
+#define Interface_h
+
+// #include <Servo.h>
+// #include <Arduino.h>
+// // #include <DFRobot_LedDisplayModule.h>
+// #include "DFRobot_LedDisplayModule.h"
+// #include <FastLED.h> 
+// #include <TMRpcm.h>
+
+// #include <Arduino.h>
+
+// class SensorControl {
+//   public:
+//     SensorControl(int sensorPinInput);
+//     SensorControl();
+//     bool detected();
+//     int lastDetected();
+// };
+
+// class MotorControl {
+//   public:
+//     MotorControl();
+//     MotorControl(int motorPin, SensorControl s);
+//     void run();
+//     void rotate(int deg);
+//     int getRotation();
+// };
+
+// class LightingControl {
+//   public:
+//     LightingControl();
+//     LightingControl (SensorControl s);
+//     void sendWave();
+// };
+
+// class DisplayControl {
+//   public:
+//     DisplayControl();
+//     void showCount(int number);
+// };
+
+// class CounterControl {
+//   public:
+//     CounterControl();
+//     CounterControl(int number);
+//     int getCount();
+//     int setCount(int number);
+//     int incrementCount();
+// };
+
+// class MarbleCountDisplay {
+//   public:
+//     MarbleCountDisplay();
+//     MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c);
+//     void run();
+// };
+
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
@@ -410,3 +473,5 @@ class SpeakerControl {
             }
         }
 };
+
+#endif
