@@ -21,12 +21,46 @@ test(testMotorOn) {
 }
 
 // LIGHTING CONTROL: ERIK
-test(lightingIsTriggeredByIsDetected) {
+test(lightingIsNotTriggered) {
     // this tests whether lighting is correctly triggered by isDetected
-    
-    LightingControl lighting = new LightingControl();
+    SensorControl sensor = new SensorControl();
 
+    LightingControl lighting = new LightingControl(sensor);
+
+    // sensor.detected() will return false, send wave will not run
     lighting.sendWave();
+
+    // the lights are not on.
+    assertEqual(lighting.brightness, 0)
+}
+
+test(lightingIsTriggeredByIsDetected) {
+    
+    // Define a mock class for SensorControl
+    class MockSensorControl : public SensorControl {
+    private:
+        detectedOnce = false;
+
+    public:
+        bool detected() override {
+            // Spoof the detected() function to always return true during testing
+            if (detectedOnce) {
+                return true
+            } else {
+                return false;
+            }
+        }
+    };
+
+    // this tests whether lighting is correctly triggered by isDetected
+    MockSensorControl sensor = new MockSensorControl();
+
+    LightingControl lighting = new LightingControl(sensor);
+    
+    lighting.sendWave();
+
+    // the lights have been turned on.
+    assertMore(lighting.brightness, 0)
 }
 
 test(isDetectedIsVeryQuick) {
@@ -34,10 +68,6 @@ test(isDetectedIsVeryQuick) {
     LightingControl lighting = new LightingControl();
 
     lighting.sendWave();
-}
-
-test(isDetectedWhilstLoopIsStillRunning) {
-    // is detected whilst the loop is still running (if possible, depending on the logic of the isDetected algorithm)
 }
 
 // DISPLAY CONTROL: ELI
