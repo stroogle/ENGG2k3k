@@ -6,6 +6,14 @@
 
 
 // SENSOR CONTROL: JAMES
+test(testSensorWorking) {
+    SensorControl sensor = new SensorControl(2);
+    
+    bool sensorDetecting = true;
+    bool motorActualState = if(testMotor.getSpeed)
+    
+    assertEqual(motorOn, motorActualState);
+}
 
 
 // MOTOR CONTROL: ALEXY
