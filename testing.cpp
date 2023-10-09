@@ -8,7 +8,7 @@
 // SENSOR CONTROL: JAMES
 
 
-// MOTOR CONTROL: ALEXY
+// MOTOR CONTROL: ALEXEY
 test(testMotorOn) {
     SensorControl sensor = new SensorControl(2);
     Motor testMotor = new Motor(9, sensor);  // a new counter for when we run this test
@@ -18,6 +18,27 @@ test(testMotorOn) {
     bool motorActualState = if(testMotor.getSpeed)
     
     assertEqual(motorOn, motorActualState);
+}
+
+test(testMotorRotation) {
+    // This will test that the motor logic for running and stopping the motor works
+    
+    SensorControl sensor = new SensorControl();
+    MotorControl motor = new MotorControl(sensor);
+
+    // Running the motor as soon at the box is initialised (the rotation should be 0)
+    motor.run();
+    assertEqual(motor.getRotation(), 0);
+
+    // Delaying time for 1.1 seconds to allow for the motor to start and running motor again (rotation should be 180)
+    delay(1100);
+    motor.run();
+    assertEqual(motor.getRotation(), 180);
+
+    // Delayinhg time for 21 second to ensure that the no dection threshold is hit and running motor again (roation should be 0)
+    delay(21000);       // change this value if the DETECTED_THRESHOLD_MS value changes
+    motor.run();
+    assertEqual(motor.getRotation(), 0);
 }
 
 // LIGHTING CONTROL: ERIK
