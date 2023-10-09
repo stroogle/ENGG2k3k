@@ -448,18 +448,20 @@ class SpeakerControl {
         SensorControl sensor;
         int TONE_DELAY_MS = 40;
         int LAST_TONE_PLAY;
+        int SPEAKER_PIN;
 
     public:
         SpeakerControl(int speakerPin, SensorControl s) {
             sensor = s;
+            SPEAKER_PIN = speakerPin;
             LAST_TONE_PLAY = millis() + TONE_DELAY_MS;
         }
 
         void run() {
             if(LAST_TONE_PLAY + TONE_DELAY_MS < millis()) {
-              noTone(speakerPin);
+              noTone(SPEAKER_PIN);
             } else if(sensor.detected()) {
-              tone(speakerPin, 1047, 8);
+              tone(SPEAKER_PIN, 1047, 8);
               LAST_TONE_PLAY = millis();
             } 
         }
