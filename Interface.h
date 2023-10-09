@@ -66,8 +66,7 @@
 #include <Arduino.h>
 // #include <DFRobot_LedDisplayModule.h>
 #include "DFRobot_LedDisplayModule.h"
-#include <FastLED.h> 
-#include <TMRpcm.h>
+#include <FastLED.h>
 
 class SensorControl {
     // Assignee: Alexey
@@ -247,6 +246,7 @@ class MotorControl {
          * 
          */
         void run() {
+            sensor.detected();
             if(sensor.lastDetected() + DETECTED_THRESHOLD_MS < millis()) {
                 stop();
                 return;
@@ -445,32 +445,23 @@ class MarbleCountDisplay {
 class SpeakerControl {
 
     private:
-        int NUMBER_OF_FILES = 3;
-        char* FILES;
         SensorControl sensor;
-        TMRpcm audio;
+        int TONE_DELAY_MS = 40;
+        int LAST_TONE_PLAY;
 
     public:
-        SpeakerControl(int speakerPin, char* files, SensorControl s) {
-            audio.speakerPin = speakerPin;
-            FILES = files;
+        SpeakerControl(int speakerPin, SensorControl s) {
             sensor = s;
-        }
-
-        void playRandom() {
-            int fileIdx = millis() % NUMBER_OF_FILES;
-            // audio.play(&FILES[fileIdx]);
-            playFile(FILES[fileIdx]);
-        }
-
-        void playFile(char* file) {
-            audio.play(file);
+            LAST_TONE_PLAY = millis() + TONE_DELAY_MS;
         }
 
         void run() {
-            if(sensor.detected()) {
-              playRandom(); // This might be blocking... We will have to test.
-            }
+            if(LAST_TONE_PLAY + TONE_DELAY_MS < millis()) {
+              noTone(speakerPin);
+            } else if(sensor.detected()) {
+              tone(speakerPin, 1047, 8);
+              LAST_TONE_PLAY = millis();
+            } 
         }
 };
 
