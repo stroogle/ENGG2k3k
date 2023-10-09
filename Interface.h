@@ -451,7 +451,6 @@ class SpeakerControl {
 
     public:
         SpeakerControl(int speakerPin, SensorControl s) {
-            audio.speakerPin = speakerPin;
             sensor = s;
             LAST_TONE_PLAY = millis() + TONE_DELAY_MS;
         }
