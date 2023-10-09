@@ -72,7 +72,19 @@ test(isDetectedIsVeryQuick) {
 
 // DISPLAY CONTROL: ELI
 
+test(initialisation) {
+    // this tests whether their is an issue if isDetected() is very quick, and the wave hasn't finished.
+    DisplayControl display = new DisplayControl();
 
+    assertEqual(display.LED, 00000000)
+}
+
+test(testCount) {
+    // this tests whether their is an issue if isDetected() is very quick, and the wave hasn't finished.
+     DisplayControl display = new DisplayControl();
+
+    assertEqual(display.LED, 10)
+}
 // COUNTER CONTROL: ANDREI
 
 
