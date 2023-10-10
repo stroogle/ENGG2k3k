@@ -6,12 +6,11 @@
 
 
 // SENSOR CONTROL: JAMES
-
 test(testSensorWorking) {
     // Define a mock class for SensorControl
     class MockSensorControl : public SensorControl {
     private:
-        detectedOnce = false;
+        bool detectedOnce = false;
         bool lightIsBlocked() override{
             return detectedOnce;
         }
@@ -40,8 +39,8 @@ test(testSensorTimeGap) {
     // Define a mock class for SensorControl
     class MockSensorControl : public SensorControl {
     private:
-        detectedOnce = false;
-        bool lightIsBlocked() override{
+        bool detectedOnce = false;
+        bool lightIsBlocked() override {
             return detectedOnce;
         }
     public: 
@@ -51,7 +50,8 @@ test(testSensorTimeGap) {
     };    
 
     MockSensorControl sensor = new MockSensorControl();
-    assertTrue(if(sensor.lastDetected > 0))
+
+    assertTrue(sensor.lastDetected > 0)
 } 
 
 
@@ -96,13 +96,13 @@ test(lightingIsTriggeredByIsDetected) {
     // Define a mock class for SensorControl
     class MockSensorControl : public SensorControl {
     private:
-        detectedOnce = false;
+        bool detectedOnce = false;
 
     public:
         bool detected() override {
             // Spoof the detected() function to always return true during testing
             if (detectedOnce) {
-                return true
+                return true;
             } else {
                 return false;
             }
@@ -156,6 +156,20 @@ test(getMarbleCountTest) {
 
 // SPEAKER CONTROL: THOMAS
 
+
+AUNIT_BEGIN();
+
+AUNIT_CASE(testSensorWorking);
+AUNIT_CASE(testSensorTimeGap);
+AUNIT_CASE(testMotorRotation);
+AUNIT_CASE(lightingIsNotTriggered);
+AUNIT_CASE(lightingIsTriggeredByIsDetected);
+AUNIT_CASE(isDetectedIsVeryQuick);
+AUNIT_CASE(initialisation);
+AUNIT_CASE(testCount);
+AUNIT_CASE(getMarbleCountTest);
+
+AUNIT_END();
 
 
 void setup() {

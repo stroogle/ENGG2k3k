@@ -312,11 +312,11 @@ class LightingControl {
             if(entrySensor.detected()){
                 if(brightness <= 255 && increase == true){
                     brightness++;
-                    if(brightness == 255) increase == false;
+                    if(brightness == 255) increase = false;
                 } 
                 if(brightness >= 0 && increase == false){
                     brightness--;
-                    if(brightness==0) increase == true;
+                    if(brightness==0) increase = true;
                 }
                 for (int i = 0; i < NUMBER_LEDS; i++) {
                     LED[i] = CRGB(0, brightness, 0); // Set color for all LEDs
