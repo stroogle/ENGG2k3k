@@ -6,28 +6,56 @@
 
 
 // SENSOR CONTROL: JAMES
+
 test(testSensorWorking) {
-    SensorControl sensor = new SensorControl(2);
+    // Define a mock class for SensorControl
+    class MockSensorControl : public SensorControl {
+    private:
+        detectedOnce = false;
+        bool lightIsBlocked() override{
+            return detectedOnce;
+        }
+    public: 
+        void toggleBlocked() {
+            detectedOnce = !detectedOnce;
+        }
+    };   
+
+    MockSensorControl sensor = new MockSensorControl();
+
+    bool lightBlocked = sensor.detected();
     
-    bool sensorDetecting = true;
-    bool motorActualState = if(testMotor.getSpeed)
-    
-    assertEqual(motorOn, motorActualState);
+    assertEqual(lightBlocked, false);
+
+    sensor.toggleBlocked();
+    lightBlocked = sensor.detected();
+    assertEqual(lightBlocked, true);
+
+    lightBlocked = sensor.detected();
+    assertEqual(lightBlocked, false);
+
 }
+
+test(testSensorTimeGap) {
+    // Define a mock class for SensorControl
+    class MockSensorControl : public SensorControl {
+    private:
+        detectedOnce = false;
+        bool lightIsBlocked() override{
+            return detectedOnce;
+        }
+    public: 
+        void toggleBlocked() {
+            detectedOnce = !detectedOnce;
+        }
+    };    
+
+    MockSensorControl sensor = new MockSensorControl();
+    assertTrue(if(sensor.lastDetected > 0))
+} 
 
 
 // MOTOR CONTROL: ALEXEY
-test(testMotorOn) {
-    SensorControl sensor = new SensorControl(2);
-    Motor testMotor = new Motor(9, sensor);  // a new counter for when we run this test
-    testMotor.rotate();
-
-    bool motorOn = true;
-    bool motorActualState = if(testMotor.getSpeed)
-    
-    assertEqual(motorOn, motorActualState);
-}
-
 test(testMotorRotation) {
     // This will test that the motor logic for running and stopping the motor works
     
