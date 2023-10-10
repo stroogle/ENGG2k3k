@@ -93,7 +93,7 @@ class SensorControl {
         SensorControl() {
           sensorPin = 1;
           lastDetectedTime = millis();
-          pinMode(sensorPin, INPUT);
+          pinMode(sensorPin, INPUT_PULLUP);
         };
 
         /**
@@ -102,7 +102,7 @@ class SensorControl {
         SensorControl(int sensorPinInput){
             sensorPin = sensorPinInput;
             lastDetectedTime = millis();
-            pinMode(sensorPin,INPUT);
+            pinMode(sensorPin,INPUT_PULLUP);
         };
         
         /**
@@ -158,8 +158,8 @@ class MotorControl {
         int rotatingTimeStamp;
         int STOPPED_TIME_MS = 1000;
         int ROTATE_TIME_MS = 5000;
-        int STOPPED_SPEED = 0;
-        int ROTATE_SPEED = 180;
+        int STOPPED_SPEED = 90;
+        int ROTATE_SPEED = -180;
         int DETECTED_THRESHOLD_MS = 20000;
 
         /**
