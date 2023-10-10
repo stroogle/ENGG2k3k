@@ -74,7 +74,7 @@ class SensorControl {
         enum TriggeredState {Triggered, NotTriggered};
         TriggeredState state = NotTriggered;
         int sensorPin;
-        int lastDetectedTime;
+        unsigned long lastDetectedTime;
         /**
          * @brief 
          * 
@@ -154,8 +154,8 @@ class MotorControl {
         SensorControl sensor;
         enum MotorState {Rotating, Stopped};
         MotorState state;
-        int stoppedTimeStamp;
-        int rotatingTimeStamp;
+        unsigned long stoppedTimeStamp;
+        unsigned long rotatingTimeStamp;
         int STOPPED_TIME_MS = 1000;
         int ROTATE_TIME_MS = 5000;
         int STOPPED_SPEED = 90;
@@ -447,7 +447,7 @@ class SpeakerControl {
     private:
         SensorControl sensor;
         int TONE_DELAY_MS = 40;
-        int LAST_TONE_PLAY;
+        unsigned long LAST_TONE_PLAY;
         int SPEAKER_PIN;
 
     public:
