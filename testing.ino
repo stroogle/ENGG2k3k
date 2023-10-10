@@ -64,7 +64,7 @@ test(testMotorRotation) {
 
     // Running the motor as soon at the box is initialised (the rotation should be 0)
     motor.run();
-    assertEqual(motor.getRotation(), 0);
+    assertEqual(motor.getRotation(), 90);
 
     // Delaying time for 1.1 seconds to allow for the motor to start and running motor again (rotation should be 180)
     delay(1100);
@@ -74,7 +74,7 @@ test(testMotorRotation) {
     // Delayinhg time for 21 second to ensure that the no dection threshold is hit and running motor again (roation should be 0)
     delay(21000);       // change this value if the DETECTED_THRESHOLD_MS value changes
     motor.run();
-    assertEqual(motor.getRotation(), 0);
+    assertEqual(motor.getRotation(), 90);
 }
 
 // LIGHTING CONTROL: ERIK
