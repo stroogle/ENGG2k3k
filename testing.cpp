@@ -7,74 +7,17 @@
 
 // SENSOR CONTROL: JAMES
 
-test(testSensorWorking) {
-    // Define a mock class for SensorControl
-    class MockSensorControl : public SensorControl {
-    private:
-        detectedOnce = false;
-        bool lightIsBlocked() override{
-            return detectedOnce;
-        }
-    public: 
-        void toggleBlocked() {
-            detectedOnce = !detectedOnce;
-        }
-    };   
 
-    MockSensorControl sensor = new MockSensorControl();
+// MOTOR CONTROL: ALEXY
+test(testMotorOn) {
+    SensorControl sensor = new SensorControl(2);
+    Motor testMotor = new Motor(9, sensor);  // a new counter for when we run this test
+    testMotor.rotate();
 
-    bool lightBlocked = sensor.detected();
+    bool motorOn = true;
+    bool motorActualState = if(testMotor.getSpeed)
     
-    assertEqual(lightBlocked, false);
-
-    sensor.toggleBlocked();
-    lightBlocked = sensor.detected();
-    assertEqual(lightBlocked, true);
-
-    lightBlocked = sensor.detected();
-    assertEqual(lightBlocked, false);
-
-}
-
-test(testSensorTimeGap) {
-    // Define a mock class for SensorControl
-    class MockSensorControl : public SensorControl {
-    private:
-        detectedOnce = false;
-        bool lightIsBlocked() override{
-            return detectedOnce;
-        }
-    public: 
-        void toggleBlocked() {
-            detectedOnce = !detectedOnce;
-        }
-    };    
-
-    MockSensorControl sensor = new MockSensorControl();
-    assertTrue(if(sensor.lastDetected > 0))
-} 
-
-
-// MOTOR CONTROL: ALEXEY
-test(testMotorRotation) {
-    // This will test that the motor logic for running and stopping the motor works
-    
-    SensorControl sensor = new SensorControl();
-    MotorControl motor = new MotorControl(sensor);
-
-    // Running the motor as soon at the box is initialised (the rotation should be 0)
-    motor.run();
-    assertEqual(motor.getRotation(), 90);
-
-    // Delaying time for 1.1 seconds to allow for the motor to start and running motor again (rotation should be 180)
-    delay(1100);
-    motor.run();
-    assertEqual(motor.getRotation(), 180);
-
-    // Delayinhg time for 21 second to ensure that the no dection threshold is hit and running motor again (roation should be 0)
-    delay(21000);       // change this value if the DETECTED_THRESHOLD_MS value changes
-    motor.run();
-    assertEqual(motor.getRotation(), 90);
+    assertEqual(motorOn, motorActualState);
 }
 
 // LIGHTING CONTROL: ERIK
@@ -129,19 +72,7 @@ test(isDetectedIsVeryQuick) {
 
 // DISPLAY CONTROL: ELI
 
-test(initialisation) {
-    // this tests whether their is an issue if isDetected() is very quick, and the wave hasn't finished.
-    DisplayControl display = new DisplayControl();
 
-    assertEqual(display.LED, 00000000)
-}
-
-test(testCount) {
-    // this tests whether their is an issue if isDetected() is very quick, and the wave hasn't finished.
-     DisplayControl display = new DisplayControl();
-
-    assertEqual(display.LED, 10)
-}
 // COUNTER CONTROL: ANDREI
 
 
@@ -152,6 +83,9 @@ test(getMarbleCountTest) {
 
     int actualCount = count.getCount();
     assertEqual(expectedCount, actualCount);
+    
+   
+
 }
 
 test(detectedSensorOnDisplay) {  //  checking if Sensor works and send counts into LCD
@@ -258,7 +192,6 @@ test(mockMarbleCountDisplayFail){ // Mock sensor and display shows different val
 
     assertEqual(display.showCount(counter.getCount()), 10);  // This test should fail 
 }
-
 
 // SPEAKER CONTROL: THOMAS
 
