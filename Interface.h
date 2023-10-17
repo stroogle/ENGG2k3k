@@ -101,7 +101,7 @@ class MotorControl {
         MotorState state;
         unsigned long stoppedTimeStamp;
         unsigned long rotatingTimeStamp;
-        int STOPPED_TIME_MS = 1000;
+        int STOPPED_TIME_MS = 1300;
         int ROTATE_TIME_MS = 5000;
         int STOPPED_SPEED = 90;
         int ROTATE_SPEED = -180;
@@ -181,6 +181,7 @@ class MotorControl {
          * @param motorPin The ping to attach the motor too.
          */
         MotorControl(int motorPin, SensorControl s) {
+            pinMode(motorPin, INPUT_PULLUP);
             motor.attach(motorPin);
             sensor = s;
             stop();
@@ -192,14 +193,11 @@ class MotorControl {
          */
         void run() {
             sensor.detected();
-            if(sensor.lastDetected() + DETECTED_THRESHOLD_MS < millis()) {
-                stop();
-                return;
-            }
             if(state == Stopped && hasStoppedFor(STOPPED_TIME_MS))
             {
                 rotate();
-            } else if (state == Rotating && hasRotatedFor(ROTATE_TIME_MS))
+            }
+            else if (state == Rotating && hasRotatedFor(ROTATE_TIME_MS))
             {
                 stop();
             }
@@ -231,8 +229,8 @@ class LightingControl {
         SensorControl entrySensor;
         int brightness;
         bool increase;
-        static const int LED_PIN = 7; // whatever pin we connect it to 
-        static const int NUMBER_LEDS = 40; // number of LEDS
+        static const int LED_PIN = 2; // whatever pin we connect it to 
+        static const int NUMBER_LEDS = 32; // number of LEDS
         CRGB LED[40]; 
 
     public:
@@ -383,7 +381,8 @@ class MarbleCountDisplay {
             if(sensor.detected()) {
                 counter.incrementCount();
             }
-            display.showCount(counter.getCount());
+            //display.showCount(counter.getCount());
+            Serial.println(counter.getCount());
         }
 };
 
@@ -391,7 +390,7 @@ class SpeakerControl {
 
     private:
         SensorControl sensor;
-        int TONE_DELAY_MS = 40;
+        int TONE_DELAY_MS = 500;
         unsigned long LAST_TONE_PLAY;
         int SPEAKER_PIN;
 
@@ -409,12 +408,18 @@ class SpeakerControl {
         }
 
         void run() {
+            bool detected = sensor.detected();
+
+            // Serial.println("detected");
+            Serial.println(detected);
             if(LAST_TONE_PLAY + TONE_DELAY_MS < millis()) {
               noTone(SPEAKER_PIN);
-            } else if(sensor.detected()) {
-              tone(SPEAKER_PIN, 1047, 8);
+            }
+            
+            if(detected) {
+              tone(SPEAKER_PIN, 120);
               LAST_TONE_PLAY = millis();
-            } 
+            }
         }
 };
 
