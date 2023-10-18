@@ -217,51 +217,39 @@ class MotorControl {
         }
 };
 
-class LightingControl {
+class LightingControl { // in the loop in main send wave on each iteration. non-blocking
     // Assignee: Eli
     private: 
-        SensorControl entrySensor;
-        int brightness;
-        bool increase;
         static const int LED_PIN = 7; // whatever pin we connect it to 
         static const int NUMBER_LEDS = 40; // number of LEDS
-        CRGB LED[40]; 
+        int brightness = 255;
+        bool increase = false;
 
     public:
         
         LightingControl() {
-            entrySensor = SensorControl();
-            brightness = 0;
-            increase = true;
-            FastLED.addLeds<WS2812, LightingControl::LED_PIN, GRB>(LED, LightingControl::NUMBER_LEDS);
+            Adafruit_NeoPixel strip(NUMBER_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800); // modify based on LED type
+            strip.begin();
+            strip.show();
         }
 
-        LightingControl (SensorControl s) {
-            entrySensor = s;
-            brightness = 0;
-            increase = true;
-            FastLED.addLeds<WS2812, LightingControl::LED_PIN, GRB>(LED, LightingControl::NUMBER_LEDS);
-        }
         /**
          * @brief Sends LED light wave up the Archimedes Screw
          */
         void sendWave() {
-            if(entrySensor.detected()){
-                if(brightness <= 255 && increase == true){
+                if(brightness < 255 && increase == true){
                     brightness++;
                     if(brightness == 255) increase == false;
                 }
                 if(brightness >= 0 && increase == false){
-                    // QUESTION FOR ELI: when will increase ever be false? 
                     brightness--;
                     if(brightness==0) increase == true;
                 }
                 for (int i = 0; i < NUMBER_LEDS; i++) {
-                    LED[i] = CRGB(0, brightness, 0); // Set color for all LEDs
+                   strip.setPixelColor(i, 0, brightness, 0);
                 }
-                FastLED.show(); // Display the updated LED colors
+                strip.show(); 
             }
-        }
     };
 
 class DisplayControl {
