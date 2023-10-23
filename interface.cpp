@@ -231,6 +231,7 @@ class LightingControl { // in the loop in main send wave on each iteration. non-
             Adafruit_NeoPixel strip(NUMBER_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800); // modify based on LED type
             strip.begin();
             strip.show();
+            
         }
 
         /**
