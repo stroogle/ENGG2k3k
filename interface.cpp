@@ -1,6 +1,8 @@
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
 class MotorControl {
     // Assignee: COLM
     private:
@@ -212,12 +214,93 @@ class SensorControl {
 class DisplayControl {
     // Assignee: Andrei Ziganshin
         /**
-         * @brief Displays the number provided onto the LED display.
+         * @brief Displays the number provided onto the LED display 2x16 (bottom row). 
+         *  
+         *        Call showCount(number_of_marbles);
          * 
-         * @param number 
+         * @param number
+         *
+         * put displaySetup(); and i2C_display_scan(); at the start of the main setup function
          */
-        void showCount(int number) {
-            LED.print(number);
+         pinMode(A1, OUTPUT); //SCL pin **pending setup of the pin
+         pinnMode(A2, OUTPUT); //SDA pin **pending setup of the pin
+        volatile uint8_t LCD_Addr = 0x27; //I2C Address of our display
+        char hex(int value) {
+        return "0123456789ABCDEF"[value & 0x0f]; 
+        }
+        void showCount(uint16_t val) {
+            lcd.setCursor(0x0F);
+            lcd.print(hex(val%10));
+            val = val/10;
+            
+            lcd.setCursor(0x0E);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(0x0D);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(0x0C);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(0x0B);
+            lcd.print(hex(val%10));
+        }
+        void displaySetup(){
+
+            LiquidCrystal_I2C lcd(LCD_Addr,20,4); //0x3F
+            lcd.init();                      // initialize the lcd
+            lcd.backlight(); 
+            while (!Serial); //  wait for serial monitor
+            Serial.println("\nI2C Scanner");
+            Serial.begin(9600);
+            lcd.setCursor(15,0); // (1st number indicate the row "0" - top , "1" - bottom , 2nd- position starts from 0!)
+            lcd.print("T1 Box 2023"); //top row message
+            lcd.setCursor(15,1);
+            lcd.print("0000000000000000");
+        }
+        void i2C_display_scan(){
+            byte error, address;
+            int nDevices;
+            
+            Serial.println("Scanning...");
+            
+            nDevices = 0;
+            for(address = 1; address < 127; address++ )
+            {
+                // The i2c_scanner uses the return value of
+                // the Write.endTransmisstion to see if
+                // a device did acknowledge to the address.
+                Wire.beginTransmission(address);
+                error = Wire.endTransmission();
+            
+                if (error == 0)
+                {
+                Serial.print("I2C device found at address 0x");
+                if (address<16)
+                    Serial.print("0");
+                Serial.print(address,HEX);
+                Serial.println("  !");
+            
+                nDevices++;
+                }
+                else if (error==4)
+                {
+                Serial.print("Unknown error at address 0x");
+                if (address<16)
+                    Serial.print("0");
+                Serial.println(address,HEX);
+                }    
+            }
+            if (nDevices == 0)
+                Serial.println("No I2C devices found\n");
+            else
+                Serial.println("done\n");
+            
+            delay(5000);           // wait 5 seconds for next scan
+
         }
 };
 
