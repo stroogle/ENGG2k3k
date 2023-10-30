@@ -6,61 +6,6 @@
 #ifndef Interface_h
 #define Interface_h
 
-// #include <Servo.h>
-// #include <Arduino.h>
-// // #include <DFRobot_LedDisplayModule.h>
-// #include "DFRobot_LedDisplayModule.h"
-// #include <FastLED.h> 
-// #include <TMRpcm.h>
-
-// #include <Arduino.h>
-
-// class SensorControl {
-//   public:
-//     SensorControl(int sensorPinInput);
-//     SensorControl();
-//     bool detected();
-//     int lastDetected();
-// };
-
-// class MotorControl {
-//   public:
-//     MotorControl();
-//     MotorControl(int motorPin, SensorControl s);
-//     void run();
-//     void rotate(int deg);
-//     int getRotation();
-// };
-
-// class LightingControl {
-//   public:
-//     LightingControl();
-//     LightingControl (SensorControl s);
-//     void sendWave();
-// };
-
-// class DisplayControl {
-//   public:
-//     DisplayControl();
-//     void showCount(int number);
-// };
-
-// class CounterControl {
-//   public:
-//     CounterControl();
-//     CounterControl(int number);
-//     int getCount();
-//     int setCount(int number);
-//     int incrementCount();
-// };
-
-// class MarbleCountDisplay {
-//   public:
-//     MarbleCountDisplay();
-//     MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c);
-//     void run();
-// };
-
 // Servo Library
 #include <Servo.h>
 #include <Arduino.h>
@@ -153,7 +98,7 @@ class MotorControl {
     // Assignee: COLM
     private:
         Servo motor;
-        SensorControl sensor;
+        // SensorControl sensor;
         enum MotorState {Rotating, Stopped};
         MotorState state;
         unsigned long stoppedTimeStamp;
@@ -228,7 +173,7 @@ class MotorControl {
 
         MotorControl() {
           motor.attach(1);
-          sensor = SensorControl();
+        //   sensor = SensorControl();
           stop();
         }
 
@@ -237,9 +182,9 @@ class MotorControl {
          * 
          * @param motorPin The ping to attach the motor too.
          */
-        MotorControl(int motorPin, SensorControl s) {
+        MotorControl(int motorPin) {
             motor.attach(motorPin);
-            sensor = s;
+            // sensor = s;
             stop();
         }
 
@@ -248,17 +193,13 @@ class MotorControl {
          * 
          */
         void run() {
-            sensor.detected();
-            if(sensor.lastDetected() + DETECTED_THRESHOLD_MS < millis()) {
-                stop();
-                return;
-            }
-            if(state == Stopped && hasStoppedFor(STOPPED_TIME_MS))
-            {
-                rotate();
-            } else if (state == Rotating && hasRotatedFor(ROTATE_TIME_MS))
-            {
-                stop();
+
+            unsigned long time = (millis() / 1000) % 5;
+
+            if(time == 1) {
+                motor.write(STOPPED_SPEED);
+            } else {
+                motor.write(ROTATE_SPEED);
             }
         }
 
