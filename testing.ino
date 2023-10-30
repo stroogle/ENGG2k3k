@@ -259,6 +259,29 @@ test(mockMarbleCountDisplayFail){ // Mock sensor and display shows different val
     assertEqual(display.showCount(counter.getCount()), 10);  // This test should fail 
 }
 
+test(TPM10testIRSensorResponsiveness) {
+   
+    SensorControl sensor;
+
+    // Ensure the sensor is initially not detected
+    assertEqual(sensor.detected(), false);
+
+    // Start measuring time
+    unsigned long startTime = millis();
+
+    // Simulate a marble passing through by calling detected()
+    bool marbleDetected = sensor.detected();
+
+    // Check if the sensor responds and increments ball count within 200ms
+    unsigned long endTime = millis();
+    unsigned long responseTime = endTime - startTime;
+
+    // Verify that the response time is within the acceptable range (200ms)
+    assertLessThanOrEqual(responseTime, 200);
+
+    // Ensure that the sensor's status reflects the marble detection
+    assertEqual(marbleDetected, true);
+}
 
 // SPEAKER CONTROL: THOMAS
 
