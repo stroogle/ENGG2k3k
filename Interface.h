@@ -69,6 +69,7 @@
 #include <FastLED.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
+#include <Adafruit_NeoPixel.h>
 
 class SensorControl {
     // Assignee: Alexey
@@ -282,41 +283,41 @@ class MotorControl {
         }
 };
 
-class LightingControl { // in the loop in main send wave on each iteration. non-blocking
-    // Assignee: Eli
-    private: 
-        static const int LED_PIN = 7; // whatever pin we connect it to 
-        static const int NUMBER_LEDS = 40; // number of LEDS
-        int brightness = 255;
-        bool increase = false;
+class LightingControl {
+private: 
+    static const int LED_PIN = 7; // Pin to which the LED strip is connected
+    static const int NUMBER_LEDS = 40; // Number of LEDs
+    int brightness = 255;
+    bool increase = false;
+    Adafruit_NeoPixel strip; // Adafruit_NeoPixel object
 
-    public:
-        
-        LightingControl() {
-            Adafruit_NeoPixel strip(NUMBER_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800); // modify based on LED type
-            strip.begin();
-            strip.show();
-            
-        }
+public:
+    LightingControl() : strip(NUMBER_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800) {
+        strip.begin(); // Initialize the LED strip
+    }
 
-        /**
-         * @brief Sends LED light wave up the Archimedes Screw
-         */
-        void sendWave() {
-                if(brightness < 255 && increase == true){
-                    brightness++;
-                    if(brightness == 255) increase == false;
-                }
-                if(brightness >= 0 && increase == false){
-                    brightness--;
-                    if(brightness==0) increase == true;
-                }
-                for (int i = 0; i < NUMBER_LEDS; i++) {
-                   strip.setPixelColor(i, 0, brightness, 0);
-                }
-                strip.show(); 
+    /**
+     * @brief Sends LED light wave up the Archimedes Screw
+     */
+    void sendWave() {
+        if (brightness < 255 && increase == true) {
+            brightness;
+            if (brightness == 255) {
+                increase = false;
             }
-    };
+        }
+        if (brightness >= 0 && increase == false) {
+            brightness-=5;
+            if (brightness == 0) {
+                increase = true;
+            }
+        }
+        for (int i = 0; i < NUMBER_LEDS; i++) {
+            strip.setPixelColor(i, strip.Color(0, brightness, 0)); // Set color using Adafruit_NeoPixel's Color function
+        }
+        strip.show();
+    }
+};
 
 class DisplayControl {
         public:
