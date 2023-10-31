@@ -261,31 +261,34 @@ public:
 };
 
 class DisplayControl {
+        private:
+        //LiquidCrystal_I2C_h lcd(0x27,16,2);
         public:
-          static DFRobot_LedDisplayModule LED;
-
-        public:
-          DisplayControl() {
-              Serial.begin(115200);
-              /*
-              * Wait for the chip to be initialized completely, and then exit.
-              * Select several bits for initialization, e8Bit for 8 bits and e4Bit for 4 bits.
-              */
-              while(LED.begin(LED.e8Bit) != 0)
-              {
-                  Serial.println("Failed to initialize the chip , please confirm the chip connection!");
-                  delay(1000);
-              }
-              /*
-              * Set the display area 
-              * Please resend the display value if the display area is changed
-              */
-              LED.setDisplayArea(0,1,2,3,4,5,6,7); //need to test how setting of the setDisplayArea work
-              LED.print("0","0","0","0","0","0","0","0");
+        LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
+          // volatile uint8_t LCD_Addr = 0x27; //I2C Address of our display
+         // LiquidCrystal_I2C lcd(0x27,16,2);
+          // DisplayControl() {
+          //     Serial.begin(115200);
+          //     /*
+          //     * Wait for the chip to be initialized completely, and then exit.
+          //     * Select several bits for initialization, e8Bit for 8 bits and e4Bit for 4 bits.
+          //     */
+          //     while(LED.begin(LED.e8Bit) != 0)
+          //     {
+          //         Serial.println("Failed to initialize the chip , please confirm the chip connection!");
+          //         delay(1000);
+          //     }
+          //     /*
+          //     * Set the display area 
+          //     * Please resend the display value if the display area is changed
+          //     */
+          //     LED.setDisplayArea(0,1,2,3,4,5,6,7); //need to test how setting of the setDisplayArea work
+          //     LED.print("0","0","0","0","0","0","0","0");
               
-          }
+          // }
 
-      class DisplayControl {
+      DisplayControl() {
+        // lcd = LiquidCrystal_I2C;
     // Assignee: Andrei Ziganshin
         /**
          * @brief Displays the number provided onto the LED display 2x16 (bottom row). 
@@ -296,44 +299,84 @@ class DisplayControl {
          *
          * put displaySetup(); and i2C_display_scan(); at the start of the main setup function
          */
-         pinMode(A1, OUTPUT); //SCL pin **pending setup of the pin
-         pinnMode(A2, OUTPUT); //SDA pin **pending setup of the pin
-        volatile uint8_t LCD_Addr = 0x27; //I2C Address of our display
+       //  pinMode(A5, OUTPUT); //SCL pin **pending setup of the pin
+       //  pinnMode(A4, OUTPUT); //SDA pin **pending setup of the pin
+      }
         char hex(int value) {
         return "0123456789ABCDEF"[value & 0x0f]; 
         }
         void showCount(uint16_t val) {
-            lcd.setCursor(0x0F);
+            lcd.setCursor(15,1);
             lcd.print(hex(val%10));
             val = val/10;
             
-            lcd.setCursor(0x0E);
+            lcd.setCursor(14,1);
             lcd.print(hex(val%10));
             val = val/10;
 
-            lcd.setCursor(0x0D);
+            lcd.setCursor(13,1);
             lcd.print(hex(val%10));
             val = val/10;
 
-            lcd.setCursor(0x0C);
+            lcd.setCursor(12,1);
             lcd.print(hex(val%10));
             val = val/10;
 
-            lcd.setCursor(0x0B);
+            lcd.setCursor(11,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(10,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(9,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(8,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(7,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(6,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(5,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(4,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(3,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(2,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(1,1);
+            lcd.print(hex(val%10));
+            val = val/10;
+
+            lcd.setCursor(0,1);
             lcd.print(hex(val%10));
         }
         void displaySetup(){
-
-            LiquidCrystal_I2C lcd(LCD_Addr,20,4); //0x3F
-            lcd.init();                      // initialize the lcd
-            lcd.backlight(); 
-            while (!Serial); //  wait for serial monitor
-            Serial.println("\nI2C Scanner");
-            Serial.begin(9600);
-            lcd.setCursor(15,0); // (1st number indicate the row "0" - top , "1" - bottom , 2nd- position starts from 0!)
-            lcd.print("T1 Box 2023"); //top row message
-            lcd.setCursor(15,1);
-            lcd.print("0000000000000000");
+            
+            lcd.init();                      // initialize the lcd 
+            // Print a message to the LCD.
+            lcd.backlight();
+            lcd.setCursor(0,0); // (1st number indicate the row "0" - top , "1" - bottom , 2nd- position starts from 0!)
+            lcd.print("T1 Marble Count:"); //top row message
+            
         }
         void i2C_display_scan(){
             byte error, address;
