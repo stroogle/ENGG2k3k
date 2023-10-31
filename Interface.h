@@ -226,7 +226,7 @@ class MotorControl {
 
 class LightingControl {
 private: 
-    static const int LED_PIN = 7; // Pin to which the LED strip is connected
+    static const int LED_PIN = 8; // Pin to which the LED strip is connected
     static const int NUMBER_LEDS = 40; // Number of LEDs
     int brightness = 255;
     bool increase = false;
@@ -235,6 +235,7 @@ private:
 public:
     LightingControl() : strip(NUMBER_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800) {
         strip.begin(); // Initialize the LED strip
+      //  strip.show();
     }
 
     /**
@@ -242,7 +243,7 @@ public:
      */
     void sendWave() {
         if (brightness < 255 && increase == true) {
-            brightness;
+            brightness+=5;
             if (brightness == 255) {
                 increase = false;
             }
@@ -255,232 +256,233 @@ public:
         }
         for (int i = 0; i < NUMBER_LEDS; i++) {
             strip.setPixelColor(i, strip.Color(0, brightness, 0)); // Set color using Adafruit_NeoPixel's Color function
+            // strip.show();
         }
-        strip.show();
+       strip.show();
     }
 };
 
-class DisplayControl {
-        public:
-          static DFRobot_LedDisplayModule LED;
+// class DisplayControl {
+//         public:
+//           static DFRobot_LedDisplayModule LED;
 
-        public:
-          DisplayControl() {
-              Serial.begin(115200);
-              /*
-              * Wait for the chip to be initialized completely, and then exit.
-              * Select several bits for initialization, e8Bit for 8 bits and e4Bit for 4 bits.
-              */
-              while(LED.begin(LED.e8Bit) != 0)
-              {
-                  Serial.println("Failed to initialize the chip , please confirm the chip connection!");
-                  delay(1000);
-              }
-              /*
-              * Set the display area 
-              * Please resend the display value if the display area is changed
-              */
-              LED.setDisplayArea(0,1,2,3,4,5,6,7); //need to test how setting of the setDisplayArea work
-              LED.print("0","0","0","0","0","0","0","0");
+//         public:
+//           DisplayControl() {
+//               Serial.begin(115200);
+//               /*
+//               * Wait for the chip to be initialized completely, and then exit.
+//               * Select several bits for initialization, e8Bit for 8 bits and e4Bit for 4 bits.
+//               */
+//               while(LED.begin(LED.e8Bit) != 0)
+//               {
+//                   Serial.println("Failed to initialize the chip , please confirm the chip connection!");
+//                   delay(1000);
+//               }
+//               /*
+//               * Set the display area 
+//               * Please resend the display value if the display area is changed
+//               */
+//               LED.setDisplayArea(0,1,2,3,4,5,6,7); //need to test how setting of the setDisplayArea work
+//               LED.print("0","0","0","0","0","0","0","0");
               
-          }
+//           }
 
-      class DisplayControl {
-    // Assignee: Andrei Ziganshin
-        /**
-         * @brief Displays the number provided onto the LED display 2x16 (bottom row). 
-         *  
-         *        Call showCount(number_of_marbles);
-         * 
-         * @param number
-         *
-         * put displaySetup(); and i2C_display_scan(); at the start of the main setup function
-         */
-         pinMode(A1, OUTPUT); //SCL pin **pending setup of the pin
-         pinnMode(A2, OUTPUT); //SDA pin **pending setup of the pin
-        volatile uint8_t LCD_Addr = 0x27; //I2C Address of our display
-        char hex(int value) {
-        return "0123456789ABCDEF"[value & 0x0f]; 
-        }
-        void showCount(uint16_t val) {
-            lcd.setCursor(0x0F);
-            lcd.print(hex(val%10));
-            val = val/10;
+//       class DisplayControl {
+//     // Assignee: Andrei Ziganshin
+//         /**
+//          * @brief Displays the number provided onto the LED display 2x16 (bottom row). 
+//          *  
+//          *        Call showCount(number_of_marbles);
+//          * 
+//          * @param number
+//          *
+//          * put displaySetup(); and i2C_display_scan(); at the start of the main setup function
+//          */
+//          pinMode(A1, OUTPUT); //SCL pin **pending setup of the pin
+//          pinnMode(A2, OUTPUT); //SDA pin **pending setup of the pin
+//         volatile uint8_t LCD_Addr = 0x27; //I2C Address of our display
+//         char hex(int value) {
+//         return "0123456789ABCDEF"[value & 0x0f]; 
+//         }
+//         void showCount(uint16_t val) {
+//             lcd.setCursor(0x0F);
+//             lcd.print(hex(val%10));
+//             val = val/10;
             
-            lcd.setCursor(0x0E);
-            lcd.print(hex(val%10));
-            val = val/10;
+//             lcd.setCursor(0x0E);
+//             lcd.print(hex(val%10));
+//             val = val/10;
 
-            lcd.setCursor(0x0D);
-            lcd.print(hex(val%10));
-            val = val/10;
+//             lcd.setCursor(0x0D);
+//             lcd.print(hex(val%10));
+//             val = val/10;
 
-            lcd.setCursor(0x0C);
-            lcd.print(hex(val%10));
-            val = val/10;
+//             lcd.setCursor(0x0C);
+//             lcd.print(hex(val%10));
+//             val = val/10;
 
-            lcd.setCursor(0x0B);
-            lcd.print(hex(val%10));
-        }
-        void displaySetup(){
+//             lcd.setCursor(0x0B);
+//             lcd.print(hex(val%10));
+//         }
+//         void displaySetup(){
 
-            LiquidCrystal_I2C lcd(LCD_Addr,20,4); //0x3F
-            lcd.init();                      // initialize the lcd
-            lcd.backlight(); 
-            while (!Serial); //  wait for serial monitor
-            Serial.println("\nI2C Scanner");
-            Serial.begin(9600);
-            lcd.setCursor(15,0); // (1st number indicate the row "0" - top , "1" - bottom , 2nd- position starts from 0!)
-            lcd.print("T1 Box 2023"); //top row message
-            lcd.setCursor(15,1);
-            lcd.print("0000000000000000");
-        }
-        void i2C_display_scan(){
-            byte error, address;
-            int nDevices;
+//             LiquidCrystal_I2C lcd(LCD_Addr,20,4); //0x3F
+//             lcd.init();                      // initialize the lcd
+//             lcd.backlight(); 
+//             while (!Serial); //  wait for serial monitor
+//             Serial.println("\nI2C Scanner");
+//             Serial.begin(9600);
+//             lcd.setCursor(15,0); // (1st number indicate the row "0" - top , "1" - bottom , 2nd- position starts from 0!)
+//             lcd.print("T1 Box 2023"); //top row message
+//             lcd.setCursor(15,1);
+//             lcd.print("0000000000000000");
+//         }
+//         void i2C_display_scan(){
+//             byte error, address;
+//             int nDevices;
             
-            Serial.println("Scanning...");
+//             Serial.println("Scanning...");
             
-            nDevices = 0;
-            for(address = 1; address < 127; address++ )
-            {
-                // The i2c_scanner uses the return value of
-                // the Write.endTransmisstion to see if
-                // a device did acknowledge to the address.
-                Wire.beginTransmission(address);
-                error = Wire.endTransmission();
+//             nDevices = 0;
+//             for(address = 1; address < 127; address++ )
+//             {
+//                 // The i2c_scanner uses the return value of
+//                 // the Write.endTransmisstion to see if
+//                 // a device did acknowledge to the address.
+//                 Wire.beginTransmission(address);
+//                 error = Wire.endTransmission();
             
-                if (error == 0)
-                {
-                Serial.print("I2C device found at address 0x");
-                if (address<16)
-                    Serial.print("0");
-                Serial.print(address,HEX);
-                Serial.println("  !");
+//                 if (error == 0)
+//                 {
+//                 Serial.print("I2C device found at address 0x");
+//                 if (address<16)
+//                     Serial.print("0");
+//                 Serial.print(address,HEX);
+//                 Serial.println("  !");
             
-                nDevices++;
-                }
-                else if (error==4)
-                {
-                Serial.print("Unknown error at address 0x");
-                if (address<16)
-                    Serial.print("0");
-                Serial.println(address,HEX);
-                }    
-            }
-            if (nDevices == 0)
-                Serial.println("No I2C devices found\n");
-            else
-                Serial.println("done\n");
+//                 nDevices++;
+//                 }
+//                 else if (error==4)
+//                 {
+//                 Serial.print("Unknown error at address 0x");
+//                 if (address<16)
+//                     Serial.print("0");
+//                 Serial.println(address,HEX);
+//                 }    
+//             }
+//             if (nDevices == 0)
+//                 Serial.println("No I2C devices found\n");
+//             else
+//                 Serial.println("done\n");
             
-            delay(5000);           // wait 5 seconds for next scan
+//             delay(5000);           // wait 5 seconds for next scan
 
-        }
-};
+//         }
+// };
 
-class CounterControl {
-    // Assignee: Ibrahim
-    private:
-        int counter;
+// class CounterControl {
+//     // Assignee: Ibrahim
+//     private:
+//         int counter;
 
-    public:
-        CounterControl() {
-            counter = 1;
-        }
+//     public:
+//         CounterControl() {
+//             counter = 1;
+//         }
 
-        CounterControl(int number) {
-            counter = number;
-        }
-        /**
-         * @brief Get the Count
-         * 
-         * @return int - The current count
-         */
-        int getCount() {
-            return counter;  // Return counter
-        }
+//         CounterControl(int number) {
+//             counter = number;
+//         }
+//         /**
+//          * @brief Get the Count
+//          * 
+//          * @return int - The current count
+//          */
+//         int getCount() {
+//             return counter;  // Return counter
+//         }
 
-        /**
-         * @brief Set the Count object
-         * 
-         * @return int - The previous value of the counter
-         */
-        int setCount(int number) {
+//         /**
+//          * @brief Set the Count object
+//          * 
+//          * @return int - The previous value of the counter
+//          */
+//         int setCount(int number) {
 
-            if(number > 99999999){
-                number = 0;
-            }
+//             if(number > 99999999){
+//                 number = 0;
+//             }
             
-            int previousValue = counter; // Store the previous value
-            counter = number;           // Update the counter
-            return previousValue;       // Return the previous value
-        }
+//             int previousValue = counter; // Store the previous value
+//             counter = number;           // Update the counter
+//             return previousValue;       // Return the previous value
+//         }
 
-        /**
-         * @brief Increment the Count of the object
-         * 
-         * @return int - The previous value of the counter
-         */
-        int incrementCount() {
-            return setCount(counter + 1); // Take stored value from setCount and incrementing by 1 and return it
-        }
-};
+//         /**
+//          * @brief Increment the Count of the object
+//          * 
+//          * @return int - The previous value of the counter
+//          */
+//         int incrementCount() {
+//             return setCount(counter + 1); // Take stored value from setCount and incrementing by 1 and return it
+//         }
+// };
 
-class MarbleCountDisplay {
-    // Assignee: Thomas
-    private:
-        DisplayControl display;
-        SensorControl sensor;
-        CounterControl counter;
+// class MarbleCountDisplay {
+//     // Assignee: Thomas
+//     private:
+//         DisplayControl display;
+//         SensorControl sensor;
+//         CounterControl counter;
 
-    public:
-        MarbleCountDisplay() {
-          display = DisplayControl();
-          sensor = SensorControl();
-          counter = CounterControl();
-        }
+//     public:
+//         MarbleCountDisplay() {
+//           display = DisplayControl();
+//           sensor = SensorControl();
+//           counter = CounterControl();
+//         }
 
-        MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {
-          display = d;
-          sensor = s;
-          counter = c;
-        }
+//         MarbleCountDisplay(DisplayControl d, SensorControl s, CounterControl c) {
+//           display = d;
+//           sensor = s;
+//           counter = c;
+//         }
 
-        /**
-         * @brief Begins the Marble Counter Component
-         * 
-         */
-        void run() {
-            if(sensor.detected()) {
-                counter.incrementCount();
-            }
-            display.showCount(counter.getCount());
-        }
-};
+//         /**
+//          * @brief Begins the Marble Counter Component
+//          * 
+//          */
+//         void run() {
+//             if(sensor.detected()) {
+//                 counter.incrementCount();
+//             }
+//             display.showCount(counter.getCount());
+//         }
+// };
 
-class SpeakerControl {
+// class SpeakerControl {
 
-    private:
-        SensorControl sensor;
-        int TONE_DELAY_MS = 40;
-        unsigned long LAST_TONE_PLAY;
-        int SPEAKER_PIN;
+//     private:
+//         SensorControl sensor;
+//         int TONE_DELAY_MS = 40;
+//         unsigned long LAST_TONE_PLAY;
+//         int SPEAKER_PIN;
 
-    public:
-        SpeakerControl(int speakerPin, SensorControl s) {
-            sensor = s;
-            SPEAKER_PIN = speakerPin;
-            LAST_TONE_PLAY = millis() + TONE_DELAY_MS;
-        }
+//     public:
+//         SpeakerControl(int speakerPin, SensorControl s) {
+//             sensor = s;
+//             SPEAKER_PIN = speakerPin;
+//             LAST_TONE_PLAY = millis() + TONE_DELAY_MS;
+//         }
 
-        void run() {
-            if(LAST_TONE_PLAY + TONE_DELAY_MS < millis()) {
-              noTone(SPEAKER_PIN);
-            } else if(sensor.detected()) {
-              tone(SPEAKER_PIN, 1047, 8);
-              LAST_TONE_PLAY = millis();
-            } 
-        }
-};
+//         void run() {
+//             if(LAST_TONE_PLAY + TONE_DELAY_MS < millis()) {
+//               noTone(SPEAKER_PIN);
+//             } else if(sensor.detected()) {
+//               tone(SPEAKER_PIN, 1047, 8);
+//               LAST_TONE_PLAY = millis();
+//             } 
+//         }
+// };
 
 #endif
